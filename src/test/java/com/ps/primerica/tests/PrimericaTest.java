@@ -2,25 +2,24 @@ package com.ps.primerica.tests;
 
 import java.util.List;
 
-import io.appium.java_client.AppiumDriver;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ps.primerica.config.EnvironmentUtils;
 import com.ps.primerica.config.PrimericaProvider;
-import com.ps.primerica.tests.appointment.AppointmentSuiteTests;
+import com.ps.primerica.tests.cm.CMSuiteTests;
+import com.ps.primerica.tests.login.LoginSuiteTests;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	AppointmentSuiteTests.class,
+	LoginSuiteTests.class,
+	CMSuiteTests.class
 })
 public class PrimericaTest {
 	
@@ -46,7 +45,7 @@ public class PrimericaTest {
 //		String sauceApiKey = System.getenv().get("SAUCE_API_KEY");
 		String seleniumStartingURL = System.getenv().get("SELENIUM_STARTING_URL");
 		
-       	LOGGER.info("seleniumHost : {}", seleniumHost);
+ /*      	LOGGER.info("seleniumHost : {}", seleniumHost);
        	LOGGER.info("seleniumPort : {}", seleniumPort);
        	LOGGER.info("seleniumPlatform : {}", seleniumPlatform);
        	LOGGER.info("seleniumVersion : {}", seleniumVersion);
@@ -59,7 +58,7 @@ public class PrimericaTest {
        	LOGGER.info("sauceUserName : {}", sauceUserName);
        	LOGGER.info("sauceApiKey : {}", sauceApiKey);
        	LOGGER.info("seleniumStartingURL : {}", seleniumStartingURL);
-		
+*/		
 		drivers = PrimericaProvider.getInstance().getDrivers();
 	}
 	

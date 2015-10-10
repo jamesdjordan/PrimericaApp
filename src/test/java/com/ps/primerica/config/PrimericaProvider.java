@@ -1,5 +1,8 @@
 package com.ps.primerica.config;
 
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,6 +22,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -26,7 +30,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import com.google.common.collect.Lists;
 
 public class PrimericaProvider  {
-	private final static String LOCAL_BROWSERS = "browsers.json";
+	private final static String LOCAL_BROWSERS = "devices.json";
     private static PrimericaProvider _primericaProvider;
 
     private List<WebDriver> drivers = Lists.newArrayList();
@@ -44,20 +48,38 @@ public class PrimericaProvider  {
     	
   		List<Future<WebDriver>> futures = Lists.newArrayList();
 		for (Map<String, String> browserProperties : browsers) {
-	    	final DesiredCapabilities desiredCapabilities = generateCommonDesiredCapabilities();
-    		String os = browserProperties.get("os");
+	   		final String type = browserProperties.get("type");
+	    	final DesiredCapabilities desiredCapabilities = generateCommonDesiredCapabilities(type);
+	   		String platform = browserProperties.get("platform");
+	   		String platformVersion = browserProperties.get("platformVersion");
     		String browser = browserProperties.get("browser");
     		String version = browserProperties.get("version");
-   	        desiredCapabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
-	   	    if (version != null) {
+    		String orientation = browserProperties.get("orientation");
+    		String deviceName = browserProperties.get("deviceName");
+    		if (StringUtils.isNotEmpty(browser)) {
+       	        desiredCapabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
+    		}
+	   	    if (StringUtils.isNotEmpty(version)) {
 	   	    	desiredCapabilities.setCapability(CapabilityType.VERSION, version);
 	        }
-	   	    desiredCapabilities.setCapability(CapabilityType.PLATFORM, os);
-            desiredCapabilities.setCapability("name",  getName(os, browser, version));
+	   	    if (StringUtils.isNotEmpty(platform)) {
+		   	    desiredCapabilities.setCapability(CapabilityType.PLATFORM, platform);
+	   	    }
+	   	    if (StringUtils.isNotEmpty(platformVersion)) {
+		   	    desiredCapabilities.setCapability("platformVersion", platformVersion);
+	   	    }
+            if (StringUtils.isNotEmpty(orientation)) {
+                desiredCapabilities.setCapability("deviceOrientation",  orientation);
+            }
+            if (StringUtils.isNotEmpty(deviceName)) {
+                desiredCapabilities.setCapability("deviceName",  deviceName);
+            }
+
+            desiredCapabilities.setCapability("name",  getName(browserProperties));
 
             Callable<WebDriver> initDriverTask = new Callable<WebDriver>(){
 				public WebDriver call() throws Exception {
-					WebDriver driver = new RemoteWebDriver(getUrl(), desiredCapabilities);
+					WebDriver driver = getDriverByType(type, getUrl(), desiredCapabilities);
                     waitForContext(driver);
 					return driver;
 				}
@@ -77,10 +99,51 @@ public class PrimericaProvider  {
     }
 
 
+    private RemoteWebDriver getDriverByType(String type, URL url, DesiredCapabilities desiredCapabilities) {
+		if (type == null) {
+			return  new RemoteWebDriver(url, desiredCapabilities);
+		}
+		if (type.equalsIgnoreCase("android")) {
+			return  new AndroidDriver<WebElement>(url, desiredCapabilities);
+		}
+		if (type.equalsIgnoreCase("iphone")) {
+			return  new IOSDriver<WebElement>(url, desiredCapabilities);
+		}
+		return  new RemoteWebDriver(url, desiredCapabilities);
+    }
     
-	private DesiredCapabilities generateCommonDesiredCapabilities() {
-    	DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-		return desiredCapabilities;
+	private DesiredCapabilities generateCommonDesiredCapabilities(String type) {
+		if (type == null) {
+			return new DesiredCapabilities();
+		}
+		if (type.equalsIgnoreCase("android")) {
+			return DesiredCapabilities.android();
+		}
+		if (type.equalsIgnoreCase("ipad")) {
+			return DesiredCapabilities.ipad();
+		}
+		if (type.equalsIgnoreCase("iphone")) {
+			return DesiredCapabilities.iphone();
+		}
+		if (type.equalsIgnoreCase("chrome")) {
+			return DesiredCapabilities.chrome();
+		}
+		if (type.equalsIgnoreCase("edge")) {
+			return DesiredCapabilities.edge();
+		}
+		if (type.equalsIgnoreCase("firefox")) {
+			return DesiredCapabilities.firefox();
+		}
+		if (type.equalsIgnoreCase("opera")) {
+			return DesiredCapabilities.operaBlink();
+		}
+		if (type.equalsIgnoreCase("safari")) {
+			return DesiredCapabilities.safari();
+		}
+		if (type.equalsIgnoreCase("phantomjs")) {
+			return DesiredCapabilities.phantomjs();
+		}
+		return new DesiredCapabilities();
 	}
 	
 	private URL getUrl() {
@@ -105,9 +168,36 @@ public class PrimericaProvider  {
         return url;
 	}
 	
-	private String getName(String os, String browser, String version) {
-        return ApplicationProperties.getInstance().getProperty(ApplicationConstants.DESIRED_CAPABILITIES_NAME) +
-        		" ( " + os + " : " + browser + " : " + version + " ) ";
+	private String getName(Map<String, String> browserProperties) {
+		StringBuilder name = new StringBuilder();
+		name.append(ApplicationProperties.getInstance().getProperty(ApplicationConstants.DESIRED_CAPABILITIES_NAME));
+		String type = browserProperties.get("type");
+		String deviceType = browserProperties.get("deviceType");
+		String platform = browserProperties.get("platform");
+		String browser = browserProperties.get("browser");
+		String version = browserProperties.get("version");
+		String platformVersion = browserProperties.get("platformVersion");
+		String deviceName = browserProperties.get("deviceName");
+		String deviceOrientation = browserProperties.get("deviceOrientation");
+		name.append(" on ").append(deviceType).append(" device");
+		if (type.equalsIgnoreCase("android") || type.equalsIgnoreCase("iphone")  ) {
+			name
+			.append(" ( ")
+			.append(deviceName)
+			.append(", ").append(platformVersion)
+			.append(", ").append(browser)
+			.append(", ").append(deviceOrientation)
+			.append(" ) ");
+		}
+		else {
+			name
+			.append(" ( ")
+			.append(platform)
+			.append(", ").append(browser)
+			.append(" ver. ").append(version)
+			.append(" ) ");
+		}
+		return name.toString();
 	}
 
 	private void waitForContext(WebDriver driver) {
