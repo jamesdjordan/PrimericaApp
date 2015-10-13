@@ -87,9 +87,9 @@ public class CMPage extends BasePage {
 		WebElement errorLabel = driver.findElement(By.xpath("//*[@name='primaryLastContact']/parent::*/following-sibling::*[1]"));
 		String error = errorLabel.getAttribute("innerText");
         Assert.assertTrue(error.contains(ERROR_MESSAGE_DATE_RANGE));
-		WebElement saveButton = driver.findElement(By.cssSelector("button[title='Save']"));
-		saveButton.click();
-		sleep(2000);
+	// saveButton = driver.findElement(By.cssSelector("button[title='Save']"));
+	//	saveButton.click();
+	//	sleep(2000);
 //		dateField = driver.findElement(By.name("primaryLastContact"));
 //        Assert.assertTrue(dateField.isDisplayed());
  	}

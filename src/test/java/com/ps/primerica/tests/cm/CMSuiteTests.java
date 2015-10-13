@@ -5,16 +5,15 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	LoadContactList.class,
 	GoToAddContactForm.class,
 	FillDatesInContactForm.class,
 	ValidateDatesInContactView.class,
 	ValidateDatesInContactForm.class,
-	FillFutureDateInLastContactAndValidate.class
-/*	FillSpouseDatesInContactForm.class,
+	FillFutureDateInLastContactAndValidate.class,
+	FillSpouseDatesInContactForm.class,
 	ValidateSpouseDatesInContactView.class,
 	ValidateSpouseDatesInContactForm.class,
-	FillChildrenDatesInContactForm.class,
+/*	FillChildrenDatesInContactForm.class,
 	ValidateChildrenDatesInContactView.class,
 	FillAppointmentDatesInContactForm.class,
 	ValidateAppointmentDatesInContactView.class,
