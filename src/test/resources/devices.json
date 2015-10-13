@@ -1,13 +1,5 @@
 [
- 	{
- 		"deviceType" : "Mobile",
- 		"type" : "Android",
- 		"platform" : "Linux",
- 		"platformVersion" : "4.4",
- 		"deviceName" : "Android Emulator",
- 		"browser" : "Chrome",
- 		"deviceOrientation" : "portrait"
- 	},
+ 
  	{
  		"deviceType" : "Desktop",
  		"type" : "Chrome",
@@ -15,4 +7,6 @@
  		"browser" : "Chrome",
  		"version" : "44"
  	}
-]
+
+
+ ]

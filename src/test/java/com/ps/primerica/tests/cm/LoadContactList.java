@@ -2,9 +2,9 @@ package com.ps.primerica.tests.cm;
 
 import org.openqa.selenium.WebDriver;
 
-public class CheckPersonList extends AbstractCMTests {
+public class LoadContactList extends AbstractCMTests {
 
-	public CheckPersonList(WebDriver driver) {
+	public LoadContactList(WebDriver driver) {
 		super(driver);
 	}
 

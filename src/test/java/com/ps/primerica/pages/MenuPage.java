@@ -20,7 +20,7 @@ public class MenuPage extends BasePage {
 	private By MFNA_MENU_ITEM = 
 			By.cssSelector("[click-track=\'[\"MenuClick\", \"Menu\", \"Mobile FNA\"]\']");
 	
-	private By MENU_UTILITIES = By.cssSelector(".PRIcons-menu-utilities");
+	private By MENU_UTILITIES = By.id("options");
 	private By RIGHT_SLIDE_MENU_CONTAINER = By.id("rightSlideMenuContainer");
 
 	public MenuPage(WebDriver driver) {
@@ -45,13 +45,13 @@ public class MenuPage extends BasePage {
 	}
 	
 	public void clickOnContactManager() {
-		WAIT_60.until(ExpectedConditions.visibilityOfElementLocated(CONTACT_MANAGER_MENU_ITEM));
-        sleep(1000);
+		WAIT_60.until(ExpectedConditions.elementToBeClickable(CONTACT_MANAGER_MENU_ITEM));
         driver.findElement(CONTACT_MANAGER_MENU_ITEM).click();
+        sleep(5000);
 	}
 	
 	public void clickOnItemInContextMenu(String label) {
-		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(MENU_UTILITIES));
+		WAIT_10.until(ExpectedConditions.elementToBeClickable(MENU_UTILITIES));
 	    driver.findElement(MENU_UTILITIES).click();
 	    WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(RIGHT_SLIDE_MENU_CONTAINER));
 	    findTextAndClickByType("span", label);
@@ -59,6 +59,7 @@ public class MenuPage extends BasePage {
 	
 	public void findTextAndClickByType (String type, String label) {
 		By element = By.xpath("//" + type + "[contains(text(),\"" + label +"\")]");
+		WAIT_10.until(ExpectedConditions.elementToBeClickable(element));
 		driver.findElement(element).click();
 		sleep(1000);
 	}
