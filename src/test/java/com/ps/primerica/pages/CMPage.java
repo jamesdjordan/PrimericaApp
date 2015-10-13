@@ -83,11 +83,16 @@ public class CMPage extends BasePage {
 	public void fillFutureDateInLastContactAndValidate() {
 		WebElement dateField = driver.findElement(By.name("primaryLastContact"));
 		dateComponent.sendDate(dateField, "12/12/2015");
-		WebElement errorLabel = 
-				driver.findElement(By.cssSelector("[ng-show=\"(validationMode || addPrimary.primaryDOB.$dirty)]"));
+		sleep(2000);
+		WebElement errorLabel = driver.findElement(By.xpath("//*[@name='primaryLastContact']/parent::*/following-sibling::*[1]"));
 		String error = errorLabel.getAttribute("innerText");
         Assert.assertTrue(error.contains(ERROR_MESSAGE_DATE_RANGE));
-	}
+		WebElement saveButton = driver.findElement(By.cssSelector("button[title='Save']"));
+		saveButton.click();
+		sleep(2000);
+//		dateField = driver.findElement(By.name("primaryLastContact"));
+//        Assert.assertTrue(dateField.isDisplayed());
+ 	}
 
 	public void fillDateFieldsInSpouseContactForm() {
 		WebElement dateField = driver.findElement(By.name("spouseDOB"));
