@@ -10,8 +10,8 @@ import org.junit.runners.Suite;
 	FillDatesInContactForm.class,
 	ValidateDatesInContactView.class,
 	ValidateDatesInContactForm.class,
-	FillFutureDateInLastContactAndValidate.class,
-	FillSpouseDatesInContactForm.class,
+	FillFutureDateInLastContactAndValidate.class
+/*	FillSpouseDatesInContactForm.class,
 	ValidateSpouseDatesInContactView.class,
 	ValidateSpouseDatesInContactForm.class,
 	FillChildrenDatesInContactForm.class,
@@ -19,6 +19,6 @@ import org.junit.runners.Suite;
 	FillAppointmentDatesInContactForm.class,
 	ValidateAppointmentDatesInContactView.class,
 	ValidateAppointmentDatesInContactForm.class
-	
+	*/
 })
 public class CMSuiteTests {}
