@@ -152,7 +152,7 @@ public class CMPage extends BasePage {
 	public void validateAppointmentDatesInContactView() {
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(panelTitle));
 		WebElement dateField = driver.findElement(panelTitle);
-		dateComponent.validateDateInElement(dateField, "07/07/1997", "span", 0);
+		dateComponent.validateDateInElement(dateField, "09/09/2001", "span", 0);
 	}
 
 	public void validateChildrenDatesInContactView() {
