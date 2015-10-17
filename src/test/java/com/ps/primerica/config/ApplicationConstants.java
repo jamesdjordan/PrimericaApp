@@ -11,6 +11,8 @@ public interface ApplicationConstants {
 	String DESIRED_CAPABILITIES_SELENIUM_HOST = "desiredCapabilities.seleniumHost";
 	String DESIRED_CAPABILITIES_SELENIUM_PORT = "desiredCapabilities.seleniumPort";
 
+	String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
+
 	String APPLICATION_USERNAME = "application.userName";
 	String APPLICATION_PASSWORD = "application.password";
 }

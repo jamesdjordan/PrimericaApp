@@ -1,12 +1,20 @@
 [
- 
- 	{
+	{
  		"deviceType" : "Desktop",
  		"type" : "Chrome",
  		"platform" : "Windows 7",
  		"browser" : "Chrome",
  		"version" : "44"
- 	}
-
+ 	},
+ 	
+	{
+		"deviceType" : "Mobile",
+		"type" : "Android",
+		"platform" : "Linux",
+		"platformVersion" : "4.4",
+		"deviceName" : "Android",
+		"browser" : "browser",
+		"deviceOrientation" : "portrait"
+	}
 
  ]

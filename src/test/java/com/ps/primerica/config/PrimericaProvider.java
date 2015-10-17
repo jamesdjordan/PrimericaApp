@@ -1,9 +1,7 @@
 package com.ps.primerica.config;
 
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,6 +21,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -56,6 +56,7 @@ public class PrimericaProvider  {
     		String version = browserProperties.get("version");
     		String orientation = browserProperties.get("orientation");
     		String deviceName = browserProperties.get("deviceName");
+    		String appiumVersion = browserProperties.get("appiumVersion");
     		if (StringUtils.isNotEmpty(browser)) {
        	        desiredCapabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
     		}
@@ -73,6 +74,9 @@ public class PrimericaProvider  {
             }
             if (StringUtils.isNotEmpty(deviceName)) {
                 desiredCapabilities.setCapability("deviceName",  deviceName);
+            }
+            if (StringUtils.isNotEmpty(appiumVersion)) {
+                desiredCapabilities.setCapability("appiumVersion",  appiumVersion);
             }
 
             desiredCapabilities.setCapability("name",  getName(browserProperties));
@@ -100,16 +104,41 @@ public class PrimericaProvider  {
 
 
     private RemoteWebDriver getDriverByType(String type, URL url, DesiredCapabilities desiredCapabilities) {
-		if (type == null) {
+		String sauce = System.getenv().get("SAUCE");
+      	boolean isSauceEnabled = (sauce == null) || 
+      			(sauce.equals("null")) || !sauce.equalsIgnoreCase("false");
+
+    	if (isSauceEnabled) {
+    		if (type.equalsIgnoreCase("android")) {
+    			return  new AndroidDriver<WebElement>(url, desiredCapabilities);
+    		}
+    		return new RemoteWebDriver(url, desiredCapabilities);
+    	}
+    	else {
+      		if (type.equalsIgnoreCase("chrome")) {
+    	    	System.setProperty(
+    	    		ApplicationConstants.WEBDRIVER_CHROME_DRIVER,
+    	    		ApplicationProperties.getInstance().getProperty(ApplicationConstants.WEBDRIVER_CHROME_DRIVER)
+    	    	);
+    	    	return new ChromeDriver();
+    		}
+      		else if (type.equalsIgnoreCase("firefox")) {
+    	    	return new FirefoxDriver();
+    		}
+    		return new RemoteWebDriver(url, desiredCapabilities);
+    	}
+    	
+    	/*	if (type == null) {
 			return  new RemoteWebDriver(url, desiredCapabilities);
 		}
 		if (type.equalsIgnoreCase("android")) {
-			return  new AndroidDriver<WebElement>(url, desiredCapabilities);
+			return  new RemoteWebDriver(url, desiredCapabilities);
 		}
 		if (type.equalsIgnoreCase("iphone")) {
-			return  new IOSDriver<WebElement>(url, desiredCapabilities);
+			return  new RemoteWebDriver(url, desiredCapabilities);
 		}
 		return  new RemoteWebDriver(url, desiredCapabilities);
+		*/
     }
     
 	private DesiredCapabilities generateCommonDesiredCapabilities(String type) {
@@ -117,7 +146,9 @@ public class PrimericaProvider  {
 			return new DesiredCapabilities();
 		}
 		if (type.equalsIgnoreCase("android")) {
+//			return DesiredCapabilities.chrome();
 			return DesiredCapabilities.android();
+//			return new DesiredCapabilities();
 		}
 		if (type.equalsIgnoreCase("ipad")) {
 			return DesiredCapabilities.ipad();

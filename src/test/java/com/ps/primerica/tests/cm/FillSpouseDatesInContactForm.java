@@ -10,7 +10,7 @@ public class FillSpouseDatesInContactForm extends AbstractCMTests {
 
 	@Override
 	public void executeTest() {
-		driver.navigate().back();
+    	cmPage.goToContactProfile();
     	menuPage.findTextAndClickByType("a", "Add Spouse");
     	cmPage.addRequiredSpouseContactFormValues(userName);
     	cmPage.fillDateFieldsInSpouseContactForm();

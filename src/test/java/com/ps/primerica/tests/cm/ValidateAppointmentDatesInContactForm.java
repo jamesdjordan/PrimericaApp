@@ -11,6 +11,6 @@ public class ValidateAppointmentDatesInContactForm extends AbstractCMTests {
 	@Override
 	public void executeTest() {
 		cmPage.goToEditAppointment();
-    	cmPage.validateChildrenDatesInContactForm();
+    	cmPage.validateAppointmentDatesInContactForm();
  	}
 }

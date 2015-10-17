@@ -10,9 +10,9 @@ public class FillAppointmentDatesInContactForm extends AbstractCMTests {
 
 	@Override
 	public void executeTest() {
-		driver.navigate().back();
-		driver.navigate().back();
-		menuPage.findTextAndClickByType("a", "Add Appointment");
+		menuPage.backByScript();
+		menuPage.clickOnBack();
+		menuPage.clickOnItemInContextMenu("Add Appointment");
     	cmPage.addRequiredAppointmentContactFormValues();
     	cmPage.fillDateFieldsInAppointmentContactForm();
     	cmPage.saveForm();

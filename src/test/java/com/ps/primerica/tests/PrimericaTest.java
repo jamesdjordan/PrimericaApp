@@ -28,7 +28,7 @@ public class PrimericaTest {
 
 	@BeforeClass
 	public static void setup() throws Exception {
-       	LOGGER.info("Setup drivers : ");
+/*       	LOGGER.info("Setup drivers : ");
 		String seleniumHost = System.getenv().get("SELENIUM_HOST");
 		String seleniumPort = System.getenv().get("SELENIUM_PORT");
 		String seleniumPlatform = System.getenv().get("SELENIUM_PLATFORM");
@@ -45,7 +45,7 @@ public class PrimericaTest {
 //		String sauceApiKey = System.getenv().get("SAUCE_API_KEY");
 		String seleniumStartingURL = System.getenv().get("SELENIUM_STARTING_URL");
 		
- /*      	LOGGER.info("seleniumHost : {}", seleniumHost);
+       	LOGGER.info("seleniumHost : {}", seleniumHost);
        	LOGGER.info("seleniumPort : {}", seleniumPort);
        	LOGGER.info("seleniumPlatform : {}", seleniumPlatform);
        	LOGGER.info("seleniumVersion : {}", seleniumVersion);

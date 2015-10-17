@@ -1,6 +1,9 @@
 package com.ps.primerica.pages;
 
+import io.appium.java_client.android.AndroidDriver;
+
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,15 @@ public abstract class BasePage {
 			Thread.sleep(ms);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	protected void hideKeyboard() {
+		if (driver instanceof AndroidDriver) {
+			try {
+			((AndroidDriver)driver).hideKeyboard();
+			}
+			catch (Exception e) {}
 		}
 	}
 }
