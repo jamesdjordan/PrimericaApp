@@ -67,12 +67,14 @@ public class DateComponent extends BasePage {
 
 	public void validateDateInDiv(String message, WebElement dateField, String date) {
 		List<WebElement> dateInnerDivs = dateField.findElements(By.tagName("div"));
-		Assert.assertEquals(message, date, dateInnerDivs.get(1).getAttribute("innerText"));
+		String innerText = getTextByElement(dateInnerDivs.get(1));
+		Assert.assertEquals(message, date, innerText);
 	}
 
 	public void validateDateInElement(WebElement dateField, String date, String element, int index ) {
 		List<WebElement> dateInnerDivs = dateField.findElements(By.tagName(element));
-		Assert.assertEquals(date, dateInnerDivs.get(index).getAttribute("innerText"));
+		String innerText = getTextByElement(dateInnerDivs.get(index));
+		Assert.assertEquals(date, innerText);
 	}
 
 	public void checkInvalid(WebElement dateField, WebElement saveButton, WebElement errorLabel) {
@@ -145,5 +147,14 @@ public class DateComponent extends BasePage {
 		saveButton.click();
 		sleep(10000);
 		Assert.assertFalse(errorLabel.isDisplayed());
+	}
+	
+	
+	protected String getTextByElement(WebElement element) {
+		String result = element.getAttribute("innerText");
+		if (result == null) {
+			result = element.getText(); 
+		}
+		return result;
 	}
 }

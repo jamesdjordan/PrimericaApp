@@ -1,12 +1,18 @@
 [
 	{
  		"deviceType" : "Desktop",
+ 		"type" : "Firefox",
+ 		"platform" : "Windows 7",
+ 		"browser" : "Firefox",
+ 		"version" : "41"
+ 	},	
+	{
+ 		"deviceType" : "Desktop",
  		"type" : "Chrome",
  		"platform" : "Windows 7",
  		"browser" : "Chrome",
  		"version" : "44"
  	},
- 	
 	{
 		"deviceType" : "Mobile",
 		"type" : "Android",
@@ -16,5 +22,4 @@
 		"browser" : "browser",
 		"deviceOrientation" : "portrait"
 	}
-
  ]
