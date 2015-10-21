@@ -1,0 +1,17 @@
+{
+	"clientLocation" : "Alberta",
+	"personalInfo" : {
+		"client" : {
+			"firstName" : "Den",
+			"lastName" : "Z",
+			"gender" : "Male",
+			"dateOfBirth" : "01/01/1990"
+		},
+		"spouse" : {
+			"firstName" : "Den",
+			"lastName" : "Z",
+			"gender" : "Male",
+			"dateOfBirth" : "01/01/1990"
+		},
+	}
+}
