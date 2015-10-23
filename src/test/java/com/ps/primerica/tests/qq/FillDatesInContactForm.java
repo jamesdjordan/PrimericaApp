@@ -10,6 +10,8 @@ public class FillDatesInContactForm  extends AbstractQQTests {
 
 	@Override
 	public void executeTest() {
-    	qqPage.fillDatesInContactForm();
+    	qqPage.fillDatesInContactForm(contact);
+    	qqPage.goToProducts();
+    	qqPage.goToPersonalInfo();
 	}
 }

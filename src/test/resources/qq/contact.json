@@ -1,0 +1,10 @@
+{
+	"personalInfo" : {
+		"client" : {
+			"dateOfBirth" : "06/06/1996"
+		},
+		"spouse" : {
+			"dateOfBirth" : "07/07/1997"
+		}
+	}
+}

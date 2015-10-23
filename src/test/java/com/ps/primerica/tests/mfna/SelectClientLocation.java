@@ -10,6 +10,6 @@ public class SelectClientLocation extends AbstractMFNATests {
 
 	@Override
 	public void executeTest() {
-		mfnaPage.selectClientLocation();
+		mfnaPage.selectClientLocation(contact);
 	}
 }

@@ -1,5 +1,21 @@
 [
 	{
+		"deviceType" : "Mobile",
+		"type" : "Android",
+		"platform" : "Linux",
+		"platformVersion" : "4.4",
+		"deviceName" : "Android",
+		"browser" : "browser",
+		"deviceOrientation" : "portrait"
+	},
+	{
+ 		"deviceType" : "Desktop",
+ 		"type" : "Firefox",
+ 		"platform" : "Windows 7",
+ 		"browser" : "Firefox",
+ 		"version" : "41"
+ 	},	
+	{
  		"deviceType" : "Desktop",
  		"type" : "Chrome",
  		"platform" : "Windows 7",

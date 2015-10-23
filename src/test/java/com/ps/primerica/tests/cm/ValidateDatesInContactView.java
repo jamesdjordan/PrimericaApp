@@ -10,6 +10,6 @@ public class ValidateDatesInContactView extends AbstractCMTests {
 
 	@Override
 	public void executeTest() {
-    	cmPage.validateDatesInContactView();
+    	cmPage.validateDatesInContactView(contact);
  	}
 }

@@ -13,8 +13,8 @@ public class FillAppointmentDatesInContactForm extends AbstractCMTests {
 		menuPage.backByScript();
 		menuPage.clickOnBack();
 		menuPage.clickOnItemInContextMenu("Add Appointment");
-    	cmPage.addRequiredAppointmentContactFormValues();
-    	cmPage.fillDateFieldsInAppointmentContactForm();
+    	cmPage.addRequiredAppointmentContactFormValues(contact);
+    	cmPage.fillDateFieldsInAppointmentContactForm(contact);
     	cmPage.saveForm();
 	}
 }

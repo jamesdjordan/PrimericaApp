@@ -12,8 +12,8 @@ public class FillChildrenDatesInContactForm extends AbstractCMTests {
 	public void executeTest() {
 		menuPage.back();
 		menuPage.findTextAndClickByType("a", " Add Children");
-    	cmPage.addRequiredChildrenContactFormValues(userName);
-    	cmPage.fillDateFieldsInChildrenContactForm();
+    	cmPage.addRequiredChildrenContactFormValues(contact);
+    	cmPage.fillDateFieldsInChildrenContactForm(contact);
     	cmPage.saveForm();
 	}
 }

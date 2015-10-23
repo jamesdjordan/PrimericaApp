@@ -11,6 +11,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import com.google.common.collect.Lists;
 import com.ps.primerica.config.PrimericaProvider;
+import com.ps.primerica.json.JsonMapper;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.junit.Parallelized;
@@ -21,7 +22,7 @@ public abstract class AbstractBaseTests implements SauceOnDemandSessionIdProvide
 	
 	protected WebDriver driver;
 	protected String userName = "ATestUser";
-
+	protected JsonMapper mapper = new JsonMapper();
 
 	public @Rule
     SauceOnDemandTestWatcher resultReportingTestWatcher;

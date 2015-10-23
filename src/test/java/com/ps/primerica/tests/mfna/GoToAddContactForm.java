@@ -10,6 +10,7 @@ public class GoToAddContactForm extends AbstractMFNATests {
 
 	@Override
 	public void executeTest() {
+    	mfnaPage.goToContactList();
     	mfnaPage.goToAddContactForm();
 	}
 }

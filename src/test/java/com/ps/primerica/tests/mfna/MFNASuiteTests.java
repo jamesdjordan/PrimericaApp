@@ -5,11 +5,12 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	RemoveContactIfExists.class,
 	GoToAddContactForm.class,
 	SelectClientLocation.class,
 	FillRequiredFieldsInContactForm.class,
 	FillDatesInContactForm.class,
 	GoToContactForm.class,
-	ValidateDatesInContactForm.class,
+//	ValidateDatesInContactForm.class,
 })
 public class MFNASuiteTests {}

@@ -10,7 +10,10 @@ public class GoToContactForm extends AbstractMFNATests {
 
 	@Override
 	public void executeTest() {
+		String firstName = contact.getPersonalInfo().getClient().getFirstName();
+		String lastName = contact.getPersonalInfo().getClient().getLastName();
     	mfnaPage.goToContactList();
-    	
-	}
+    	mfnaPage.searchContact(firstName + " " + lastName);
+    	mfnaPage.goToContactForm(contact);
+ 	}
 }

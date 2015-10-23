@@ -11,6 +11,6 @@ public class ValidateSpouseDatesInContactForm extends AbstractCMTests {
 	@Override
 	public void executeTest() {
 		menuPage.clickOnItemInContextMenu("Edit");
-    	cmPage.validateSpouseDatesInContactForm();
+    	cmPage.validateSpouseDatesInContactForm(contact);
  	}
 }

@@ -11,15 +11,18 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ps.primerica.config.EnvironmentUtils;
 import com.ps.primerica.config.PrimericaProvider;
 import com.ps.primerica.tests.cm.CMSuiteTests;
 import com.ps.primerica.tests.login.LoginSuiteTests;
+import com.ps.primerica.tests.mfna.MFNASuiteTests;
+import com.ps.primerica.tests.qq.QQSuiteTests;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	LoginSuiteTests.class,
-	CMSuiteTests.class
+	CMSuiteTests.class,
+	MFNASuiteTests.class,
+	QQSuiteTests.class
 })
 public class PrimericaTest {
 	

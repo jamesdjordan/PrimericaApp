@@ -1,0 +1,29 @@
+{
+	"personalInfo" : {
+		"client" : {
+			"firstName" : "WilliamsCl",
+			"lastName" : "King",
+			"gender" : "Male",
+			"dateOfBirth" : "01/01/1991",
+			"lastContactDate" : "09/09/2009"
+		},
+		"spouse" : {
+			"firstName" : "AndrewSp",
+			"lastName" : "Jackson",
+			"gender" : "Male",
+			"dateOfBirth" : "02/02/1992"
+		}
+	},
+	"children" : [
+	    {
+	    	"firstName" : "MichaelCh",
+			"dateOfBirth" : "02/02/2002"
+	    }
+	],
+	"appointments" : [
+	    {
+	    	"type" : "Business Overview",
+	    	"date" : "03/03/2003"
+	    }
+	]
+}

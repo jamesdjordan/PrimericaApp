@@ -12,6 +12,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.ps.primerica.components.DateComponent;
+import com.ps.primerica.model.Appointment;
+import com.ps.primerica.model.Child;
+import com.ps.primerica.model.Contact;
 
 public class CMPage extends BasePage {
 
@@ -21,8 +24,8 @@ public class CMPage extends BasePage {
 	private By PERSON_LIST_ITEM = By.cssSelector(".person-list-item.clickable");
 
 	private final String ADD_CONTACT_FORM_URL = "https://test.primericaonline.com/wlpol/apps/services/www/Primerica/desktopbrowser/default/index.html#/cm/contacts/addContact";
+	private final String CONTACT_LIST_URL = "https://test.primericaonline.com/wlpol/apps/services/www/Primerica/desktopbrowser/default/index.html#/cm/contacts";
 
-	
 	public static final String ADD_CONTACT = "Add Contact";
 	public static final String CANCEL = "Cancel";
 	public static final String IMPORT_CONTACTS = "Import Contacts";
@@ -38,8 +41,6 @@ public class CMPage extends BasePage {
 	protected final String ERROR_MESSAGE_DATE_FORMAT = "Invalid date format.";
 	protected final String ERROR_MESSAGE_DATE_RANGE = "Date must be between 01/01/1900 and";
 	
-	private String USERNAME = "Brian";
-	
 	// Dates
 	private By spouseDOB = By.name("spouseDOB");
 	private By primaryDOB = By.name("primaryDOB");
@@ -48,9 +49,17 @@ public class CMPage extends BasePage {
 	private By apptDate= By.name("apptDate");
 
 	private By panelTitle = By.cssSelector(".panel-title");
-	By saveButton = By.cssSelector("button[title='Save']");
-	By saveButton2 = By.cssSelector("button[title=\"Save\"]");
-	By viewContact = By.cssSelector("[ng-click=\"viewContact()\"]");
+	private By saveButton = By.cssSelector("button[title='Save']");
+	private By saveButton2 = By.cssSelector("button[title=\"Save\"]");
+	private By viewContact = By.cssSelector("[ng-click=\"viewContact()\"]");
+	private By backNav = By.id("backNav");
+	
+	private By searchIcon = By.cssSelector(".PRIcons-search");
+	private By searchInput = By.cssSelector("[ng-model=\"search\"]");
+	private By personItem = By.cssSelector("[ng-click=\"getPersonDetails(person.agentId, person.prospectId, true)\"]");
+	private By onPositiveClicked = By.cssSelector("[ng-click=\"onPositiveClicked()\"]");
+			
+	private By contactList = By.cssSelector(".contact-list");
 	
 	public CMPage(WebDriver driver) {
 		super(driver);
@@ -74,26 +83,18 @@ public class CMPage extends BasePage {
         Assert.assertTrue("Person list should not be empty", CollectionUtils.isNotEmpty(items));
 	}
 	
-	public void fillRequiredFieldsInContactForm() {
-		addRequiredContactFormValues(USERNAME);
+	public void fillRequiredFieldsInContactForm(Contact contact) {
+		addRequiredContactFormValues(contact);
 	}
 
-	public void fillRequiredFieldsInSpouseContactForm() {
-		addRequiredSpouseContactFormValues(USERNAME);
-	}
-
-	public void fillRequiredFieldsInChildrenContactForm() {
-		addRequiredChildrenContactFormValues(USERNAME);
-	}
-
-	public void fillDateFieldsInContactForm() {
+	public void fillDateFieldsInContactForm(Contact contact) {
 		sleep(1000);
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(primaryDOB));
 		WebElement dateField = driver.findElement(primaryDOB);
-		dateComponent.sendDate(dateField, "05/05/1995");
+		dateComponent.sendDate(dateField, contact.getPersonalInfo().getClient().getDateOfBirth());
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(primaryLastContact));
 		dateField = driver.findElement(primaryLastContact);
-		dateComponent.sendDate(dateField, "06/06/1996");
+		dateComponent.sendDate(dateField, contact.getPersonalInfo().getClient().getLastContactDate());
 	}
 
 	public void fillFutureDateInLastContactAndValidate() {
@@ -104,7 +105,7 @@ public class CMPage extends BasePage {
 		By errorBy = By.xpath("//*[@name='primaryLastContact']/parent::*/following-sibling::*[1]");
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(errorBy));
 		WebElement errorLabel = driver.findElement(errorBy);
-		String error = errorLabel.getAttribute("innerText");
+		String error = getTextByElement(errorLabel);
         Assert.assertTrue(error.contains(ERROR_MESSAGE_DATE_RANGE));
 	// saveButton = driver.findElement(By.cssSelector("button[title='Save']"));
 	//	saveButton.click();
@@ -113,80 +114,86 @@ public class CMPage extends BasePage {
 //        Assert.assertTrue(dateField.isDisplayed());
  	}
 
-	public void fillDateFieldsInSpouseContactForm() {
+	public void fillDateFieldsInSpouseContactForm(Contact contact) {
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(spouseDOB));
 		WebElement dateField = driver.findElement(spouseDOB);
-		dateComponent.sendDate(dateField, "07/07/1997");
+		dateComponent.sendDate(dateField, contact.getPersonalInfo().getSpouse().getDateOfBirth() );
 	}
 
-	public void fillDateFieldsInChildrenContactForm() {
+	public void fillDateFieldsInChildrenContactForm(Contact contact) {
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(childDOB));
 		WebElement dateField = driver.findElement(childDOB);
-		dateComponent.sendDate(dateField, "08/08/1998");
+		Child child = contact.getChildren().get(0);
+		dateComponent.sendDate(dateField, child.getDateOfBirth());
 	}
 	
-	public void fillDateFieldsInAppointmentContactForm() {
+	public void fillDateFieldsInAppointmentContactForm(Contact contact) {
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(apptDate));
 		WebElement dateField = driver.findElement(apptDate);
-		dateComponent.sendDate(dateField, "09/09/2001");
+		Appointment appointment = contact.getAppointments().get(0);
+		dateComponent.sendDate(dateField, appointment.getDate());
 	}
 
-	public void validateDatesInContactView() {
+	public void validateDatesInContactView(Contact contact) {
 		By lastContactDate = By.cssSelector("[ng-show=\"contact.lastContactDate\"]");
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(lastContactDate));
 		WebElement dateField = driver.findElement(lastContactDate);
-		dateComponent.validateDateInDiv("Last Contact date", dateField, "06/06/1996");
+		dateComponent.validateDateInDiv("Last Contact date", dateField, contact.getPersonalInfo().getClient().getLastContactDate());
 		By dateOfBirth = By.cssSelector("[ng-show=\"contact.dateOfBirth\"]");
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(dateOfBirth));
 		dateField = driver.findElement(dateOfBirth);
-		dateComponent.validateDateInDiv("Date of Birth", dateField, "05/05/1995");
+		dateComponent.validateDateInDiv("Date of Birth", dateField, contact.getPersonalInfo().getClient().getDateOfBirth());
 	}
 
-	public void validateSpouseDatesInContactView() {
+	public void validateSpouseDatesInContactView(Contact contact) {
 		By spouseDateOfBirth = By.cssSelector("[ng-show=\"contact.spouseDateOfBirth\"]");
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(spouseDateOfBirth));
 		WebElement dateField = driver.findElement(spouseDateOfBirth);
-		dateComponent.validateDateInDiv("Spouse Date of Birth", dateField, "07/07/1997");
+		dateComponent.validateDateInDiv("Spouse Date of Birth", dateField, contact.getPersonalInfo().getSpouse().getDateOfBirth());
 	}
 
-	public void validateAppointmentDatesInContactView() {
+	public void validateAppointmentDatesInContactView(Contact contact) {
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(panelTitle));
 		WebElement dateField = driver.findElement(panelTitle);
-		dateComponent.validateDateInElement(dateField, "09/09/2001", "span", 0);
+		Appointment appointment = contact.getAppointments().get(0);
+		dateComponent.validateDateInElement(dateField, appointment.getDate(), "span", 0);
 	}
 
-	public void validateChildrenDatesInContactView() {
+	public void validateChildrenDatesInContactView(Contact contact) {
 		By dateOfBirth = By.cssSelector("div[ng-show=\"getChildDOB(child.dateOfBirth)\"]");
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(dateOfBirth));
 		WebElement dateField = driver.findElement(dateOfBirth);
-		dateComponent.validateDateInElement(dateField, "08/08/1998", "span", 1);
+		Child child = contact.getChildren().get(0);
+		dateComponent.validateDateInElement(dateField, child.getDateOfBirth(), "span", 1);
 	}
 
-	public void validateDatesInContactForm() {
+	public void validateDatesInContactForm(Contact contact) {
 		WebElement dateField = driver.findElement(primaryDOB);
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(primaryDOB));
-		dateComponent.validateDate("Date of Birth", dateField, "05/05/1995");
+		dateComponent.validateDate("Date of Birth", dateField, contact.getPersonalInfo().getClient().getDateOfBirth());
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(primaryLastContact));
 		dateField = driver.findElement(primaryLastContact);
-		dateComponent.validateDate("Last Contact date", dateField, "06/06/1996");
+		dateComponent.validateDate("Last Contact date", dateField, contact.getPersonalInfo().getClient().getLastContactDate());
 	}
 
-	public void validateSpouseDatesInContactForm() {
+	public void validateSpouseDatesInContactForm(Contact contact) {
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(spouseDOB));
 		WebElement dateField = driver.findElement(spouseDOB);
-		dateComponent.validateDate("Spouse Date of Birth", dateField, "07/07/1997");
+		dateComponent.validateDate("Spouse Date of Birth", dateField, contact.getPersonalInfo().getSpouse().getDateOfBirth());
 	}
 
-	public void validateChildrenDatesInContactForm() {
+	public void validateChildrenDatesInContactForm(Contact contact) {
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(childDOB));
 		WebElement dateField = driver.findElement(childDOB);
-		dateComponent.validateDate("Child Date of Birth", dateField, "08/08/1998");
+		Child child = contact.getChildren().get(0);
+		dateComponent.validateDate("Child Date of Birth", dateField, child.getDateOfBirth());
 	}
 
-	public void validateAppointmentDatesInContactForm() {
+	public void validateAppointmentDatesInContactForm(Contact contact) {
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(apptDate));
 		WebElement dateField = driver.findElement(apptDate);
-		dateComponent.validateDate("Appointment Date", dateField, "09/09/2001");
+		Appointment appointment = contact.getAppointments().get(0);
+		dateComponent.validateDate("Appointment Date", dateField, appointment.getDate());
 	}
 
 	public void saveForm() {
@@ -226,29 +233,31 @@ public class CMPage extends BasePage {
 		dateComponent.checkInvalid(dateField, saveButton, null);
 	}
 
-	public void addRequiredContactFormValues (String userName) {
+	public void addRequiredContactFormValues (Contact contact) {
 		By firstName = By.name("firstName");
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(firstName));
 		WebElement element = driver.findElement(firstName);
-		element.sendKeys(userName);
+		element.sendKeys(contact.getPersonalInfo().getClient().getFirstName());
 	}
 
-	public void addRequiredSpouseContactFormValues (String userName) {
+	public void addRequiredSpouseContactFormValues (Contact contact) {
 		By spouseFirstName = By.name("spouseFirstName");
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(spouseFirstName));
-		driver.findElement(spouseFirstName).sendKeys(userName);
+		driver.findElement(spouseFirstName).sendKeys(contact.getPersonalInfo().getSpouse().getFirstName());
 	}
 
-	public void addRequiredChildrenContactFormValues (String userName) {
+	public void addRequiredChildrenContactFormValues (Contact contact) {
 		By firstName = By.name("firstName");
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(firstName));
-		driver.findElement(firstName).sendKeys(userName);
+		Child child = contact.getChildren().get(0);
+		driver.findElement(firstName).sendKeys(child.getFirstName());
 	}
 
-	public void addRequiredAppointmentContactFormValues () {
+	public void addRequiredAppointmentContactFormValues (Contact contact) {
 		By apptType = By.name("apptType");
 		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(apptType));
-		driver.findElement(apptType).sendKeys("Business Overview");
+		Appointment appointment = contact.getAppointments().get(0);
+		driver.findElement(apptType).sendKeys(appointment.getType());
 	}
 
 	public void loadAppointmentForm() {
@@ -315,8 +324,51 @@ public class CMPage extends BasePage {
 
 	public void goToContactProfile() {
 		sleep(2000);
+		WAIT_10.until(ExpectedConditions.elementToBeClickable(backNav));
+		WebElement element = driver.findElement(backNav);
+		element.click();
+		sleep(2000);
 		WAIT_10.until(ExpectedConditions.elementToBeClickable(viewContact));
-		WebElement element = driver.findElement(viewContact);
+		element = driver.findElement(viewContact);
+		element.click();
+		sleep(2000);
+	}
+	
+	public void goToContactList() {
+		driver.get(CONTACT_LIST_URL);
+		sleep(15000);
+	}
+	public void searchContact(Contact contact) {
+		WAIT_10.until(ExpectedConditions.elementToBeClickable(searchIcon));
+		WebElement element = driver.findElement(searchIcon);
+		element.click();
+		sleep(1000);
+		WAIT_10.until(ExpectedConditions.visibilityOfElementLocated(searchInput));
+		element = driver.findElement(searchInput);
+		element.clear();
+		element.sendKeys(contact.getPersonalInfo().getClient().getFirstName());
+		sleep(3000);
+	}
+	
+	public boolean selectContactIfExists(Contact contact) {
+		String label = "No Data Found";
+		WebElement list = driver.findElement(contactList);
+		String text = getTextByElement(list);
+		if (!text.contains(label)) {
+			List<WebElement> elements = driver.findElements(personItem);
+			if (CollectionUtils.isNotEmpty(elements)) {
+				elements.get(0).click();
+				sleep(2000);
+				return true;
+			}
+		}
+		return false;
+		
+	}
+	
+	public void clickOnPositiveButtonInModal() {
+		WAIT_10.until(ExpectedConditions.elementToBeClickable(onPositiveClicked));
+		WebElement element = driver.findElement(onPositiveClicked);
 		element.click();
 		sleep(2000);
 	}

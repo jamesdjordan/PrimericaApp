@@ -46,4 +46,13 @@ public abstract class BasePage {
 			catch (Exception e) {}
 		}
 	}
+	
+	protected String getTextByElement(WebElement element) {
+		String result = element.getAttribute("innerText");
+		if (result == null) {
+			result = element.getText(); 
+		}
+		return result;
+	}
+	
 }

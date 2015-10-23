@@ -10,6 +10,6 @@ public class ValidateDatesInContactForm extends AbstractMFNATests {
 
 	@Override
 	public void executeTest() {
-    	mfnaPage.validateDatesInContactForm();
+    	mfnaPage.validateDatesInContactForm(contact);
 	}
 }

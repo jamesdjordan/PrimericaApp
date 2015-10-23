@@ -12,8 +12,8 @@ public class FillSpouseDatesInContactForm extends AbstractCMTests {
 	public void executeTest() {
     	cmPage.goToContactProfile();
     	menuPage.findTextAndClickByType("a", "Add Spouse");
-    	cmPage.addRequiredSpouseContactFormValues(userName);
-    	cmPage.fillDateFieldsInSpouseContactForm();
+    	cmPage.addRequiredSpouseContactFormValues(contact);
+    	cmPage.fillDateFieldsInSpouseContactForm(contact);
     	cmPage.saveForm();
 	}
 }

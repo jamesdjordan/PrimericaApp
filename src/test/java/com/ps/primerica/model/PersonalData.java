@@ -1,11 +1,12 @@
-package com.ps.primerica.model.mfna;
+package com.ps.primerica.model;
 
-public class PersonalInfo {
+public class PersonalData {
 	
 	private String firstName;
 	private String lastName;
 	private String gender;
 	private String dateOfBirth;
+	private String lastContactDate;
 	
 	public String getFirstName() {
 		return firstName;
@@ -30,5 +31,11 @@ public class PersonalInfo {
 	}
 	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+	public String getLastContactDate() {
+		return lastContactDate;
+	}
+	public void setLastContactDate(String lastContactDate) {
+		this.lastContactDate = lastContactDate;
 	}
 }

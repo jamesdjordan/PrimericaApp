@@ -10,8 +10,8 @@ public class FillDatesInContactForm extends AbstractCMTests {
 
 	@Override
 	public void executeTest() {
-		cmPage.fillDateFieldsInContactForm();
-		cmPage.fillRequiredFieldsInContactForm();
+		cmPage.fillDateFieldsInContactForm(contact);
+		cmPage.fillRequiredFieldsInContactForm(contact);
 		cmPage.saveForm();
 	}
 }

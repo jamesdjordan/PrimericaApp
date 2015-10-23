@@ -2,6 +2,8 @@ package com.ps.primerica.tests.cm;
 
 import org.openqa.selenium.WebDriver;
 
+import com.ps.primerica.model.Child;
+
 public class ValidateChildrenDatesInContactForm extends AbstractCMTests {
 
 	public ValidateChildrenDatesInContactForm(WebDriver driver) {
@@ -10,7 +12,8 @@ public class ValidateChildrenDatesInContactForm extends AbstractCMTests {
 
 	@Override
 	public void executeTest() {
-		menuPage.findTextAndClickByType("span", "userName");
-    	cmPage.validateChildrenDatesInContactForm();
+		Child child = contact.getChildren().get(0);
+		menuPage.findTextAndClickByType("span", child.getFirstName());
+    	cmPage.validateChildrenDatesInContactForm(contact);
  	}
 }
